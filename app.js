@@ -1,11 +1,13 @@
-require('dotenv').config();
 require('express-async-errors');
-
+require('dotenv').config();
 const express = require('express');
 const app = express();
 
 // database
 const connectDB = require('./db/connect');
+
+//Route
+const productRouter = require('./routes/productRoutes')
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
@@ -19,12 +21,14 @@ app.get('/', (req, res) => {
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
+//
+app.use('/api/v1/products', productRouter)
+
 const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI);
-
+    await connectDB('mongodb+srv://codewithgoodluck:mamalet90@cluster0.wtnohap.mongodb.net/');
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
